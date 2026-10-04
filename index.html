@@ -1,304 +1,745 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        /* Reset and global styles */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f0f0f0;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        /* Banner styles */
-        .banner {
-            background-color: white;
-            padding: 10px 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-        }
-
-        .banner img {
-            height: 40px;
-            margin-left: 10px; /* Adjust this value to shift the logo */
-        }
-
-        .mobile-menu-toggle {
-            font-size: 20px;
-            cursor: pointer;
-            margin-right: 10px; /* Adjust this value if necessary */
-        }
-
-        /* Sidebar styles */
-        .sidebar {
-            width: 235px;
-            background-color: white;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            overflow-y: auto;
-            scrollbar-width: thin;
-            scrollbar-color: blue white;
-            scroll-behavior: smooth;
-            position: fixed;
-            top: 70px;
-            left: -100%;
-            height: calc(100vh - 70px);
-            transition: left 0.3s ease;
-        }
-
-        .sidebar.show-sidebar {
-            left: 0;
-        }
-
-        /* Scrollbar styles */
-        ::-webkit-scrollbar {
-            width: 5px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #007bff;
-            border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #0056b3;
-        }
-
-        /* Sidebar links */
-        .sidebar a {
-            text-decoration: none;
-            color: black;
-            font-weight: bold;
-            margin: 10px 0;
-            font-size: 14px;
-            padding: 15px;
-            background-color: white;
-            border-radius: 5px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s, box-shadow 0.2s, background-color 0.3s, color 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            position: relative;
-        }
-
-        .sidebar a:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-            background-color: #f0f8ff;
-            color: blue;
-        }
-
-        .sidebar a.active {
-            background-color: #e0f0ff;
-            border: 1px solid blue;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-            color: blue;
-        }
-
-        /* Dropdown menu */
-        .dropdown {
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-        .dropdown select {
-            width: 100%;
-            padding: 10px;
-            font-size: 14px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            appearance: none;
-            background-color: white;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            cursor: pointer;
-        }
-
-        .dropdown::after {
-            content: '\25BC';
-            position: absolute;
-            top: calc(50% - 5px);
-            right: 10px;
-            font-size: 14px;
-            pointer-events: none;
-        }
-
-        /* Content area styles */
-        .content {
-            flex: 1;
-            padding: 20px;
-            margin-top: 70px;
-            overflow-y: auto;
-            background-color: #fff;
-        }
-
-        /* Button styles */
-        .button-container {
-            flex: 1 0 calc(25% - 20px);
-            max-width: calc(25% - 20px);
-            height: 120px;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            text-decoration: none;
-            color: black;
-            transition: transform 0.2s;
-            cursor: pointer;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .button-container:hover {
-            transform: translateY(-5px);
-        }
-
-        .button-icon {
-            font-size: 22px;
-            margin-bottom: 10px;
-        }
-
-        .button-text {
-            font-size: 18px;
-            font-weight: bold;
-        }
-
-        .premium-label {
-            font-size: 12px;
-            color: #d63384;
-            margin-top: 5px;
-            font-weight: bold;
-        }
-
-        @media (max-width: 900px) {
-            .sidebar {
-                width: 50%;
-                height: calc(100vh - 70px);
-                top: 70px;
-                left: -100%;
-                transition: left 0.3s ease;
-            }
-
-            .sidebar.show-sidebar {
-                left: 0;
-            }
-
-            .mobile-menu-toggle {
-                display: block;
-            }
-
-            .button-container {
-                flex: 1 0 calc(50% - 20px);
-                max-width: calc(50% - 20px);
-            }
-
-            .content {
-                margin-top: 70px;
-            }
-        }
-
-        @media (max-width: 600px) {
-            .button-container {
-                flex: 1 0 calc(50% - 20px);
-                max-width: calc(50% - 20px);
-                height: 100px;
-            }
-        }
-    </style>
-    <title>Stethology for NEET</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>LA Needle Depth & Nerve Block Simulator</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+      colors: {
+        primary: { 400:'#38bdf8', 500:'#0ea5e9', 600:'#0284c7', 700:'#0369a1' },
+        success: { 400:'#4ade80', 500:'#22c55e', 600:'#16a34a' },
+        danger:  { 400:'#f87171', 500:'#ef4444', 600:'#dc2626' }
+      }
+    }
+  }
+}
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  body { font-family: 'Inter', system-ui, sans-serif; }
+  .glass {
+    background: rgba(255,255,255,0.75);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+  }
+  .dark .glass {
+    background: rgba(15,23,42,0.82);
+  }
+  canvas { touch-action: none; border-radius: 1rem; }
+  input[type=range] {
+    -webkit-appearance: none;
+    height: 8px;
+    border-radius: 9999px;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: #0ea5e9;
+    border: 3px solid white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    cursor: pointer;
+  }
+  .dark input[type=range]::-webkit-slider-thumb { border-color: #0f172a; }
+  .pulse-success { animation: pulseGreen 0.8s ease; }
+  @keyframes pulseGreen {
+    0% { box-shadow: 0 0 0 0 rgba(34,197,94,0.55); }
+    70% { box-shadow: 0 0 0 20px rgba(34,197,94,0); }
+    100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); }
+  }
+</style>
 </head>
+<body class="bg-gradient-to-br from-slate-50 via-sky-50 to-indigo-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 text-slate-800 dark:text-slate-100 min-h-screen transition-colors duration-500">
 
-<body>
-    <div class="banner" id="banner">
-        <div class="mobile-menu-toggle" onclick="toggleSidebar()">☰</div>
-        <img src="sfneetlogo.jpg" alt="Stethology for NEET Logo">
+<!-- Header -->
+<header class="sticky top-0 z-50 glass border-b border-white/40 dark:border-slate-700/50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-3">
+    <div class="flex items-center gap-3">
+      <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center text-white font-bold text-lg shadow-lg">
+        LA
+      </div>
+      <div>
+        <h1 class="text-lg sm:text-xl font-bold tracking-tight">LA Needle Depth Simulator</h1>
+        <p class="text-xs text-slate-500 dark:text-slate-400">Interactive Clinical Training Tool</p>
+      </div>
     </div>
+    <div class="flex items-center gap-2">
+      <button id="soundToggle" class="px-3 py-1.5 rounded-xl bg-white/80 dark:bg-slate-800 text-sm font-medium border border-slate-200 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-700 transition">
+        🔊 Sound On
+      </button>
+      <button id="themeToggle" class="px-3 py-1.5 rounded-xl bg-white/80 dark:bg-slate-800 text-sm font-medium border border-slate-200 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-700 transition">
+        🌙 Dark
+      </button>
+      <button id="resetBtn" class="px-3 py-1.5 rounded-xl bg-white/80 dark:bg-slate-800 text-sm font-medium border border-slate-200 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-700 transition">
+        Reset
+      </button>
+    </div>
+  </div>
+</header>
 
-    <div class="sidebar">
-        <div class="dropdown">
-            <select id="class-select" onchange="handleDropdownChange(event)">
-                <option value="Select class" disabled>Select class</option>
-                <option value="🧑‍🎓XI - NEET">🧑‍🎓XI - NEET</option>
-                <option value="🧑‍🎓XII - NEET">🧑‍🎓XII - NEET</option>
-                <option value="🧑‍🎓Dropper - NEET">🧑‍🎓Dropper - NEET</option>
-            </select>
+<main class="max-w-7xl mx-auto px-4 sm:px-6 py-6 grid grid-cols-1 xl:grid-cols-12 gap-6">
+
+  <!-- LEFT CONTROLS -->
+  <section class="xl:col-span-3 space-y-5">
+    <!-- Block Selection -->
+    <div class="glass rounded-2xl border border-white/50 dark:border-slate-700/50 p-5 shadow-sm">
+      <h2 class="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-3">Nerve Block</h2>
+      <select id="blockSelect" class="w-full rounded-xl border-0 bg-white dark:bg-slate-800/80 px-4 py-2.5 text-sm font-medium shadow-inner focus:ring-2 focus:ring-primary-500 outline-none">
+        <option value="ianb">Inferior Alveolar (IANB)</option>
+        <option value="psa">Posterior Superior Alveolar (PSA)</option>
+        <option value="infraorbital">Infraorbital</option>
+        <option value="mental">Mental / Incisive</option>
+        <option value="gp">Greater Palatine</option>
+        <option value="np">Nasopalatine</option>
+        <option value="buccal">Long Buccal</option>
+        <option value="infiltration">Supraperiosteal Infiltration</option>
+      </select>
+
+      <div class="grid grid-cols-2 gap-3 mt-4">
+        <div>
+          <label class="text-[11px] text-slate-500 font-medium">Patient Size</label>
+          <select id="patientSize" class="w-full mt-1 rounded-lg bg-white dark:bg-slate-800/80 px-3 py-2 text-sm border-0 shadow-inner">
+            <option value="adult">Adult</option>
+            <option value="small">Small Adult</option>
+            <option value="child">Child</option>
+          </select>
         </div>
-        <a href="homepage.html" class="active" onclick="loadPage(event, 'homepage.html')">🏠 Home</a>
-        <a href="batches.html" onclick="loadPage(event, 'batches.html')">✍️ Batches</a>
-        <a href="https://www.example.com/subject3" onclick="loadPage(event, 'https://www.example.com/subject3')">📝 Test Series</a>
-        <a href="#" onclick="loadPage(event, '#')">👨🏻‍🏫 Mentorship</a>
-        <a href="#" onclick="loadPage(event, '#')">🌐 Connect</a>
-        <a href="chatbot.html" onclick="loadPage(event, 'chatbot.html')">🤖 AI chat/Doubt support</a>
+        <div>
+          <label class="text-[11px] text-slate-500 font-medium">Needle Gauge</label>
+          <select id="needleGauge" class="w-full mt-1 rounded-lg bg-white dark:bg-slate-800/80 px-3 py-2 text-sm border-0 shadow-inner">
+            <option value="25">25 G</option>
+            <option value="27" selected>27 G</option>
+            <option value="30">30 G</option>
+          </select>
+        </div>
+      </div>
     </div>
 
-    <div class="content" id="content">
-        <!-- Dynamic content will be loaded here -->
+    <!-- Depth Control -->
+    <div class="glass rounded-2xl border border-white/50 dark:border-slate-700/50 p-5 shadow-sm">
+      <div class="flex justify-between items-end mb-1">
+        <h2 class="text-xs font-semibold uppercase tracking-wider text-slate-500">Needle Depth</h2>
+        <span id="depthValue" class="text-3xl font-extrabold text-primary-600 tracking-tighter">0.0<span class="text-base font-medium text-slate-400 ml-0.5">mm</span></span>
+      </div>
+      <input type="range" id="depthSlider" min="0" max="35" step="0.5" value="0" class="w-full mt-3">
+      <div class="flex justify-between text-[10px] text-slate-400 mt-1.5 px-0.5">
+        <span>0</span><span>10</span><span>20</span><span>30</span><span>35 mm</span>
+      </div>
+
+      <div class="grid grid-cols-2 gap-2.5 mt-5">
+        <button id="aspirateBtn" class="py-3 rounded-xl bg-amber-500 hover:bg-amber-600 active:scale-95 text-white font-semibold text-sm shadow-md transition-all">
+          Aspirate
+        </button>
+        <button id="injectBtn" disabled class="py-3 rounded-xl bg-primary-600 hover:bg-primary-700 disabled:opacity-40 disabled:cursor-not-allowed active:scale-95 text-white font-semibold text-sm shadow-md transition-all">
+          Inject
+        </button>
+      </div>
+      <p id="aspirationResult" class="mt-3 text-center text-sm min-h-[22px] font-medium"></p>
+
+      <!-- Deposition progress -->
+      <div id="depositBox" class="mt-4 hidden">
+        <div class="flex justify-between text-xs text-slate-500 mb-1">
+          <span>Deposition</span>
+          <span id="depositPct">0%</span>
+        </div>
+        <div class="h-2 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
+          <div id="depositBar" class="h-full bg-primary-500 rounded-full transition-all duration-100" style="width:0%"></div>
+        </div>
+      </div>
     </div>
 
-    <script>
-        function toggleSidebar() {
-            document.querySelector('.sidebar').classList.toggle('show-sidebar');
-        }
+    <!-- Live Feedback -->
+    <div class="glass rounded-2xl border border-white/50 dark:border-slate-700/50 p-5 shadow-sm">
+      <h2 class="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-3">Live Feedback</h2>
+      <div id="statusBadge" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600">
+        Position needle
+      </div>
+      <p id="feedbackText" class="mt-3 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+        Select a block and advance the needle.
+      </p>
+      <div id="riskBox" class="mt-3 hidden p-3 rounded-xl bg-danger-500/10 border border-danger-500/25 text-sm text-danger-600 dark:text-red-400"></div>
+    </div>
+  </section>
 
-        document.querySelectorAll('.sidebar a').forEach(link => {
-            link.addEventListener('click', function () {
-                document.querySelectorAll('.sidebar a').forEach(link => link.classList.remove('active'));
-                this.classList.add('active');
-            });
-        });
+  <!-- CENTER VISUALIZATION -->
+  <section class="xl:col-span-5">
+    <div class="glass rounded-2xl border border-white/50 dark:border-slate-700/50 p-4 shadow-sm h-full flex flex-col">
+      <div class="flex justify-between items-center mb-3 px-1">
+        <h2 class="text-xs font-semibold uppercase tracking-wider text-slate-500">Anatomical Cross-Section</h2>
+        <span id="blockName" class="text-sm font-bold text-primary-600">IANB</span>
+      </div>
+      <div class="relative flex-1 min-h-[500px] bg-gradient-to-b from-slate-100/80 to-slate-200/40 dark:from-slate-800/50 dark:to-slate-900/30 rounded-xl overflow-hidden">
+        <canvas id="simCanvas" class="w-full h-full cursor-grab active:cursor-grabbing"></canvas>
+      </div>
+      <p class="mt-2.5 text-center text-xs text-slate-400">Only the needle advances • Green band = ideal depth</p>
+    </div>
+  </section>
 
-        const selectElement = document.getElementById('class-select');
-        const savedClass = localStorage.getItem('selectedClass');
+  <!-- RIGHT INFO PANEL (Modern) -->
+  <section class="xl:col-span-4 space-y-5">
+    <div class="glass rounded-2xl border border-white/50 dark:border-slate-700/50 p-5 shadow-sm">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-xs font-semibold uppercase tracking-wider text-slate-500">Block Information</h2>
+        <span id="idealBadge" class="text-xs font-bold px-2.5 py-1 rounded-full bg-primary-500/15 text-primary-600"></span>
+      </div>
 
-        if (savedClass) {
-            selectElement.value = savedClass;
-        } else {
-            selectElement.value = "Select class";
-        }
+      <!-- Modern info cards -->
+      <div class="space-y-4">
+        <div class="p-4 rounded-xl bg-white/60 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-700/60">
+          <div class="flex items-center gap-2 mb-1.5">
+            <span class="w-6 h-6 rounded-lg bg-sky-500/20 text-sky-600 flex items-center justify-center text-xs font-bold">1</span>
+            <h3 class="text-sm font-semibold">Landmarks</h3>
+          </div>
+          <p id="infoLandmarks" class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed"></p>
+        </div>
 
-        function handleDropdownChange(event) {
-            localStorage.setItem('selectedClass', event.target.value);
-        }
+        <div class="p-4 rounded-xl bg-white/60 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-700/60">
+          <div class="flex items-center gap-2 mb-1.5">
+            <span class="w-6 h-6 rounded-lg bg-emerald-500/20 text-emerald-600 flex items-center justify-center text-xs font-bold">2</span>
+            <h3 class="text-sm font-semibold">Technique</h3>
+          </div>
+          <p id="infoTechnique" class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed"></p>
+        </div>
 
-        selectElement.addEventListener('change', handleDropdownChange);
+        <div class="p-4 rounded-xl bg-white/60 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-700/60">
+          <div class="flex items-center gap-2 mb-1.5">
+            <span class="w-6 h-6 rounded-lg bg-amber-500/20 text-amber-600 flex items-center justify-center text-xs font-bold">3</span>
+            <h3 class="text-sm font-semibold">Key Parameters</h3>
+          </div>
+          <dl id="infoParams" class="text-sm space-y-2"></dl>
+        </div>
 
-        function loadPage(event, url) {
-            event.preventDefault();
-            fetch(url)
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById('content').innerHTML = data;
-                    window.scrollTo(0, 0);
-                    document.getElementById('banner').style.display = (url === 'homepage.html') ? 'flex' : 'none';
-                })
-                .catch(error => console.error('Error loading page:', error));
-        }
+        <div class="p-4 rounded-xl bg-danger-500/5 border border-danger-500/20">
+          <div class="flex items-center gap-2 mb-1.5">
+            <span class="w-6 h-6 rounded-lg bg-danger-500/20 text-danger-600 flex items-center justify-center text-xs font-bold">!</span>
+            <h3 class="text-sm font-semibold text-danger-600">Risks & Notes</h3>
+          </div>
+          <p id="infoRisks" class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed"></p>
+        </div>
+      </div>
+    </div>
 
-        // Load the default page
-        document.addEventListener('DOMContentLoaded', () => {
-            loadPage(new Event('default'), 'homepage.html');
-        });
-    </script>
+    <!-- Quick Tips -->
+    <div class="glass rounded-2xl border border-white/50 dark:border-slate-700/50 p-5 shadow-sm">
+      <h2 class="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-3">Clinical Tips</h2>
+      <ul class="text-sm space-y-2 text-slate-600 dark:text-slate-300">
+        <li class="flex gap-2"><span class="text-primary-500">▸</span> Always aspirate in two planes</li>
+        <li class="flex gap-2"><span class="text-primary-500">▸</span> Never insert the needle to the hub</li>
+        <li class="flex gap-2"><span class="text-primary-500">▸</span> Deposit slowly (≈1 mL / 60 s)</li>
+        <li class="flex gap-2"><span class="text-primary-500">▸</span> Adjust depth for patient size</li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<footer class="mt-10 border-t border-slate-200/60 dark:border-slate-800 py-8 text-center">
+  <p class="text-sm text-slate-500">Interactive Local Anaesthesia Needle Insertion Depth & Nerve Block Simulator</p>
+  <p class="mt-1.5 font-semibold text-slate-700 dark:text-slate-200">Built by Parnava Roy</p>
+  <p class="mt-1 text-xs text-slate-400">Educational & research use only • Not a clinical substitute</p>
+</footer>
+
+<script>
+// ===================== DATA =====================
+const BLOCKS = {
+  ianb: {
+    name: "Inferior Alveolar (IANB)",
+    idealMin: 20, idealMax: 25, boneContact: true,
+    needle: "Long (32 mm)", volume: "1.5–1.8 mL",
+    landmarks: "Coronoid notch, pterygomandibular raphe, 6–10 mm above the mandibular occlusal plane. Approach from contralateral premolars.",
+    technique: "Advance parallel to the occlusal plane until gentle bone contact on the medial surface of the ramus (typically 20–25 mm). Withdraw 1 mm, aspirate in two planes, then deposit slowly. Deposit remaining solution while withdrawing to anaesthetise the lingual nerve.",
+    risks: "Over-insertion may enter the parotid gland → temporary facial nerve paralysis. Too shallow = incomplete anaesthesia. Positive aspiration is relatively common."
+  },
+  psa: {
+    name: "Posterior Superior Alveolar (PSA)",
+    idealMin: 14, idealMax: 16, boneContact: false,
+    needle: "Short (20 mm) preferred", volume: "0.9–1.8 mL",
+    landmarks: "Height of the mucobuccal fold just distal to the maxillary second molar, maxillary tuberosity.",
+    technique: "Insert at 45° upward, inward and backward simultaneously. Average depth is 16 mm in adults. Short needle reduces risk of over-insertion.",
+    risks: "Highest risk of haematoma among maxillary blocks due to proximity of the pterygoid plexus. Over-insertion increases vascular injury risk."
+  },
+  infraorbital: {
+    name: "Infraorbital",
+    idealMin: 10, idealMax: 16, boneContact: true,
+    needle: "Long (32 mm)", volume: "0.9–1.2 mL",
+    landmarks: "Infraorbital foramen (approximately 10 mm below the infraorbital rim), mucobuccal fold over the maxillary first premolar.",
+    technique: "Advance the needle toward a finger placed on the foramen until bone is gently contacted. Do not attempt to enter the foramen.",
+    risks: "Advancing too far superiorly risks intra-orbital injection. Keep the needle close to the periosteum."
+  },
+  mental: {
+    name: "Mental / Incisive",
+    idealMin: 4, idealMax: 6, boneContact: false,
+    needle: "Short (20 mm)", volume: "0.6 mL",
+    landmarks: "Mucobuccal fold just anterior to the mental foramen (usually between the premolars).",
+    technique: "Insert approximately 5–6 mm. After injection, apply firm external pressure for 1–2 minutes if an incisive effect is desired.",
+    risks: "Low risk overall. Avoid forceful entry into the mental foramen."
+  },
+  gp: {
+    name: "Greater Palatine",
+    idealMin: 4, idealMax: 6, boneContact: true,
+    needle: "Short (20 mm)", volume: "0.45–0.6 mL",
+    landmarks: "Greater palatine foramen – junction of hard and soft palate, roughly opposite the second/third molar.",
+    technique: "Approach from the opposite side of the mouth. Advance until gentle bone contact (usually 4–6 mm).",
+    risks: "Can be uncomfortable. Use topical anaesthetic and pressure anaesthesia before injection."
+  },
+  np: {
+    name: "Nasopalatine",
+    idealMin: 3, idealMax: 5, boneContact: true,
+    needle: "Short (20 mm)", volume: "≤ 0.45 mL",
+    landmarks: "Incisive papilla in the midline of the hard palate.",
+    technique: "Insert at the base of the papilla and advance 3–5 mm until bone is contacted or slightly beyond.",
+    risks: "One of the more painful injections if soft tissue is not adequately pre-anaesthetised."
+  },
+  buccal: {
+    name: "Long Buccal",
+    idealMin: 2, idealMax: 4, boneContact: true,
+    needle: "Long or short", volume: "0.2–0.3 mL",
+    landmarks: "Distal and buccal to the most posterior mandibular molar, along the anterior border of the ramus.",
+    technique: "Insert until gentle bone contact is felt (typically only 2–4 mm).",
+    risks: "Very low risk. Minimal volume required."
+  },
+  infiltration: {
+    name: "Supraperiosteal Infiltration",
+    idealMin: 2, idealMax: 5, boneContact: false,
+    needle: "Short (20 mm)", volume: "0.6–1.0 mL per tooth",
+    landmarks: "Height of the mucobuccal fold directly over the apex of the target tooth.",
+    technique: "Bevel facing bone. Advance a few millimetres until the tip is near the apex. No significant resistance should be felt.",
+    risks: "Extremely low. Ideal for maxillary teeth and limited mandibular anterior work."
+  }
+};
+
+// ===================== STATE =====================
+let state = {
+  block: 'ianb',
+  depth: 0,
+  patient: 'adult',
+  gauge: '27',
+  aspirated: false,
+  injected: false,
+  soundEnabled: true,
+  plungerProgress: 0,
+  depositProgress: 0
+};
+
+// ===================== AUDIO =====================
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+let audioCtx = null;
+
+function ensureAudio() {
+  if (!audioCtx) audioCtx = new AudioCtx();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+}
+
+function playAspirationSound() {
+  if (!state.soundEnabled) return;
+  ensureAudio();
+  const t = audioCtx.currentTime;
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(180, t);
+  osc.frequency.exponentialRampToValueAtTime(55, t + 0.13);
+  gain.gain.setValueAtTime(0.16, t);
+  gain.gain.exponentialRampToValueAtTime(0.001, t + 0.15);
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+  osc.start(t);
+  osc.stop(t + 0.16);
+
+  // short noise
+  const bufferSize = audioCtx.sampleRate * 0.07;
+  const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i++) data[i] = (Math.random() * 2 - 1) * 0.12;
+  const noise = audioCtx.createBufferSource();
+  noise.buffer = buffer;
+  const nGain = audioCtx.createGain();
+  nGain.gain.setValueAtTime(0.1, t);
+  nGain.gain.exponentialRampToValueAtTime(0.001, t + 0.07);
+  noise.connect(nGain);
+  nGain.connect(audioCtx.destination);
+  noise.start(t);
+}
+
+function playInjectionSound() {
+  if (!state.soundEnabled) return;
+  ensureAudio();
+  const t = audioCtx.currentTime;
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = 'triangle';
+  osc.frequency.setValueAtTime(85, t);
+  osc.frequency.linearRampToValueAtTime(50, t + 0.7);
+  gain.gain.setValueAtTime(0.11, t);
+  gain.gain.linearRampToValueAtTime(0.05, t + 0.4);
+  gain.gain.exponentialRampToValueAtTime(0.001, t + 0.75);
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+  osc.start(t);
+  osc.stop(t + 0.8);
+}
+
+// ===================== HELPERS =====================
+function getAdjustedIdeal() {
+  const b = BLOCKS[state.block];
+  let min = b.idealMin, max = b.idealMax;
+  if (state.patient === 'small') { min *= 0.85; max *= 0.9; }
+  if (state.patient === 'child') { min *= 0.65; max *= 0.75; }
+  return { min: +min.toFixed(1), max: +max.toFixed(1) };
+}
+
+function evaluateDepth() {
+  const { min, max } = getAdjustedIdeal();
+  const d = state.depth;
+  if (d === 0) return { status: 'neutral', msg: 'Advance the needle into the tissue.', color: 'slate' };
+  if (d < min - 3) return { status: 'shallow', msg: 'Too shallow – solution may not reach the nerve.', color: 'amber' };
+  if (d < min) return { status: 'borderline-shallow', msg: 'Slightly shallow. Advance a little further.', color: 'amber' };
+  if (d >= min && d <= max) return { status: 'ideal', msg: 'Ideal depth reached. Aspirate, then inject slowly.', color: 'success' };
+  if (d <= max + 3) return { status: 'borderline-deep', msg: 'Slightly deep. Consider withdrawing a little.', color: 'amber' };
+  return { status: 'deep', msg: 'Too deep – increased risk of complications.', color: 'danger' };
+}
+
+// ===================== DRAWING =====================
+const canvas = document.getElementById('simCanvas');
+const ctx = canvas.getContext('2d');
+
+function draw() {
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  const w = rect.width, h = rect.height;
+  const isDark = document.documentElement.classList.contains('dark');
+  const ideal = getAdjustedIdeal();
+  const maxD = 35;
+  const tissueTop = 130;               // space for fixed syringe
+  const scale = (h - tissueTop - 40) / maxD;
+
+  // Background
+  ctx.fillStyle = isDark ? '#0f172a' : '#f8fafc';
+  ctx.fillRect(0, 0, w, h);
+
+  // Tissue layers
+  const layers = [
+    { name: 'Mucosa', color: isDark ? '#9f1239' : '#fda4af', end: 2.5 },
+    { name: 'Submucosa', color: isDark ? '#9a3412' : '#fdba74', end: ideal.min * 0.55 },
+    { name: 'Target Zone', color: isDark ? '#14532d' : '#86efac', end: ideal.max },
+    { name: 'Deep Tissue', color: isDark ? '#1e3a8a' : '#93c5fd', end: ideal.max + 7 },
+    { name: 'Bone', color: isDark ? '#334155' : '#e2e8f0', end: maxD }
+  ];
+
+  let prev = 0;
+  layers.forEach(L => {
+    const y1 = tissueTop + prev * scale;
+    const y2 = tissueTop + L.end * scale;
+    ctx.fillStyle = L.color + (isDark ? 'aa' : 'cc');
+    ctx.fillRect(50, y1, w - 100, Math.max(1, y2 - y1));
+    ctx.fillStyle = isDark ? '#94a3b8' : '#475569';
+    ctx.font = '600 11px Inter';
+    ctx.fillText(L.name, 58, y1 + 13);
+    prev = L.end;
+  });
+
+  // Ideal zone outline
+  ctx.strokeStyle = '#22c55e';
+  ctx.lineWidth = 2.5;
+  ctx.setLineDash([7, 5]);
+  const yI1 = tissueTop + ideal.min * scale;
+  const yI2 = tissueTop + ideal.max * scale;
+  ctx.strokeRect(50, yI1, w - 100, yI2 - yI1);
+  ctx.setLineDash([]);
+
+  // Depth scale
+  ctx.fillStyle = isDark ? '#64748b' : '#94a3b8';
+  ctx.font = '10px Inter';
+  for (let mm = 0; mm <= maxD; mm += 5) {
+    const y = tissueTop + mm * scale;
+    ctx.beginPath();
+    ctx.moveTo(38, y);
+    ctx.lineTo(50, y);
+    ctx.strokeStyle = isDark ? '#475569' : '#cbd5e1';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    ctx.fillText(mm, 12, y + 3);
+  }
+
+  // ========== FIXED SYRINGE (does not move) ==========
+  const needleX = w * 0.5;
+  const syringeBottom = tissueTop - 8;   // fixed position
+  const barrelLen = 95;
+  const barrelTop = syringeBottom - barrelLen;
+
+  ctx.save();
+  ctx.translate(needleX, 0);
+
+  // Barrel
+  const barrelGrad = ctx.createLinearGradient(-13, 0, 13, 0);
+  barrelGrad.addColorStop(0, isDark ? '#1e293b' : '#e0f2fe');
+  barrelGrad.addColorStop(0.5, isDark ? '#334155' : '#f0f9ff');
+  barrelGrad.addColorStop(1, isDark ? '#1e293b' : '#e0f2fe');
+  ctx.fillStyle = barrelGrad;
+  ctx.beginPath();
+  ctx.roundRect(-12, barrelTop, 24, barrelLen, 5);
+  ctx.fill();
+  ctx.strokeStyle = isDark ? '#475569' : '#7dd3fc';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+
+  // Plunger (animates on inject)
+  const plungerY = barrelTop + 6 + state.plungerProgress * (barrelLen - 32);
+  ctx.fillStyle = isDark ? '#0ea5e9' : '#0284c7';
+  ctx.beginPath();
+  ctx.roundRect(-8, plungerY, 16, 12, 3);
+  ctx.fill();
+  ctx.fillStyle = isDark ? '#38bdf8' : '#0ea5e9';
+  ctx.fillRect(-2.5, barrelTop - 22, 5, plungerY - (barrelTop - 22));
+
+  // Thumb rest
+  ctx.fillStyle = '#0369a1';
+  ctx.beginPath();
+  ctx.roundRect(-15, barrelTop - 28, 30, 11, 3);
+  ctx.fill();
+
+  // Finger grips
+  ctx.fillStyle = '#075985';
+  ctx.beginPath();
+  ctx.ellipse(-16, barrelTop + 16, 6, 10, 0, 0, Math.PI * 2);
+  ctx.ellipse(16, barrelTop + 16, 6, 10, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Hub (fixed)
+  ctx.fillStyle = isDark ? '#64748b' : '#94a3b8';
+  ctx.beginPath();
+  ctx.roundRect(-7, syringeBottom - 14, 14, 12, 2);
+  ctx.fill();
+
+  // ===== NEEDLE (only this part extends) =====
+  const tipY = tissueTop + state.depth * scale;
+
+  // Needle shaft
+  ctx.strokeStyle = isDark ? '#cbd5e1' : '#64748b';
+  ctx.lineWidth = 2.3;
+  ctx.beginPath();
+  ctx.moveTo(0, syringeBottom - 2);
+  ctx.lineTo(0, tipY);
+  ctx.stroke();
+
+  // Bevel tip
+  ctx.fillStyle = '#ef4444';
+  ctx.beginPath();
+  ctx.moveTo(-4.5, tipY);
+  ctx.lineTo(4.5, tipY);
+  ctx.lineTo(0, tipY + 9);
+  ctx.closePath();
+  ctx.fill();
+
+  // Depth label next to tip
+  ctx.fillStyle = isDark ? '#f1f5f9' : '#0f172a';
+  ctx.font = 'bold 13px Inter';
+  ctx.fillText(state.depth.toFixed(1) + ' mm', 16, tipY + 4);
+
+  ctx.restore();
+
+  // Ideal glow around tip
+  if (evaluateDepth().status === 'ideal') {
+    ctx.shadowColor = '#22c55e';
+    ctx.shadowBlur = 16;
+    ctx.strokeStyle = '#22c55e';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.arc(needleX, tipY + 4, 13, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+  }
+}
+
+// ===================== UI UPDATE =====================
+function updateUI() {
+  const b = BLOCKS[state.block];
+  const ideal = getAdjustedIdeal();
+
+  document.getElementById('blockName').textContent = b.name;
+  document.getElementById('depthValue').innerHTML = state.depth.toFixed(1) + '<span class="text-base font-medium text-slate-400 ml-0.5">mm</span>';
+  depthSlider.value = state.depth;
+
+  const pct = (state.depth / 35) * 100;
+  depthSlider.style.background = `linear-gradient(to right, #0ea5e9 ${pct}%, ${document.documentElement.classList.contains('dark') ? '#334155' : '#e2e8f0'} ${pct}%)`;
+
+  // Modern info panel
+  document.getElementById('idealBadge').textContent = `${ideal.min}–${ideal.max} mm`;
+  document.getElementById('infoLandmarks').textContent = b.landmarks;
+  document.getElementById('infoTechnique').textContent = b.technique;
+  document.getElementById('infoRisks').textContent = b.risks;
+
+  document.getElementById('infoParams').innerHTML = `
+    <div class="flex justify-between"><dt class="text-slate-500">Ideal depth</dt><dd class="font-semibold">${ideal.min}–${ideal.max} mm</dd></div>
+    <div class="flex justify-between"><dt class="text-slate-500">Bone contact</dt><dd class="font-semibold">${b.boneContact ? 'Yes (then −1 mm)' : 'No'}</dd></div>
+    <div class="flex justify-between"><dt class="text-slate-500">Recommended needle</dt><dd class="font-semibold">${b.needle}</dd></div>
+    <div class="flex justify-between"><dt class="text-slate-500">Volume</dt><dd class="font-semibold">${b.volume}</dd></div>
+    <div class="flex justify-between"><dt class="text-slate-500">Gauge in use</dt><dd class="font-semibold">${state.gauge} G</dd></div>
+  `;
+
+  // Feedback
+  const ev = evaluateDepth();
+  const badge = document.getElementById('statusBadge');
+  const text = document.getElementById('feedbackText');
+  const risk = document.getElementById('riskBox');
+
+  badge.className = 'inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-semibold';
+  if (ev.color === 'success') badge.classList.add('bg-success-500/20', 'text-success-600');
+  else if (ev.color === 'danger') badge.classList.add('bg-danger-500/20', 'text-danger-600');
+  else if (ev.color === 'amber') badge.classList.add('bg-amber-500/20', 'text-amber-600');
+  else badge.classList.add('bg-slate-100', 'dark:bg-slate-800', 'text-slate-600');
+
+  badge.textContent = ev.status.replace(/-/g, ' ').toUpperCase();
+  text.textContent = ev.msg;
+
+  if (ev.status === 'deep') {
+    risk.classList.remove('hidden');
+    risk.textContent = b.risks;
+  } else {
+    risk.classList.add('hidden');
+  }
+
+  document.getElementById('injectBtn').disabled = !(state.aspirated && ev.status === 'ideal' && !state.injected);
+  draw();
+}
+
+// ===================== EVENTS =====================
+const depthSlider = document.getElementById('depthSlider');
+
+depthSlider.addEventListener('input', e => {
+  state.depth = parseFloat(e.target.value);
+  state.aspirated = false;
+  state.injected = false;
+  state.plungerProgress = 0;
+  state.depositProgress = 0;
+  document.getElementById('aspirationResult').textContent = '';
+  document.getElementById('depositBox').classList.add('hidden');
+  updateUI();
+});
+
+document.getElementById('blockSelect').addEventListener('change', e => {
+  state.block = e.target.value;
+  state.depth = 0;
+  state.aspirated = false;
+  state.injected = false;
+  state.plungerProgress = 0;
+  document.getElementById('aspirationResult').textContent = '';
+  document.getElementById('depositBox').classList.add('hidden');
+  updateUI();
+});
+
+document.getElementById('patientSize').addEventListener('change', e => {
+  state.patient = e.target.value;
+  updateUI();
+});
+
+document.getElementById('needleGauge').addEventListener('change', e => {
+  state.gauge = e.target.value;
+  updateUI();
+});
+
+document.getElementById('aspirateBtn').addEventListener('click', () => {
+  playAspirationSound();
+  const positive = Math.random() < 0.09 && (state.block === 'ianb' || state.block === 'psa');
+  const result = document.getElementById('aspirationResult');
+  if (positive) {
+    result.innerHTML = '<span class="text-danger-500">Positive aspiration – reposition needle</span>';
+    state.aspirated = false;
+  } else {
+    result.innerHTML = '<span class="text-success-500">Negative aspiration (2 planes) – safe to inject</span>';
+    state.aspirated = true;
+  }
+  updateUI();
+});
+
+document.getElementById('injectBtn').addEventListener('click', () => {
+  if (state.injected) return;
+  playInjectionSound();
+  state.injected = true;
+  document.getElementById('depositBox').classList.remove('hidden');
+
+  let start = null;
+  function animate(ts) {
+    if (!start) start = ts;
+    const p = Math.min(1, (ts - start) / 1800); // slower deposition
+    state.plungerProgress = p;
+    state.depositProgress = p;
+    document.getElementById('depositBar').style.width = (p * 100) + '%';
+    document.getElementById('depositPct').textContent = Math.round(p * 100) + '%';
+    draw();
+    if (p < 1) {
+      requestAnimationFrame(animate);
+    } else {
+      document.getElementById('aspirationResult').innerHTML = '<span class="text-primary-500 font-semibold">Injection complete</span>';
+      canvas.classList.add('pulse-success');
+      setTimeout(() => canvas.classList.remove('pulse-success'), 800);
+    }
+  }
+  requestAnimationFrame(animate);
+  updateUI();
+});
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+  state.depth = 0;
+  state.aspirated = false;
+  state.injected = false;
+  state.plungerProgress = 0;
+  state.depositProgress = 0;
+  document.getElementById('aspirationResult').textContent = '';
+  document.getElementById('depositBox').classList.add('hidden');
+  updateUI();
+});
+
+document.getElementById('themeToggle').addEventListener('click', () => {
+  document.documentElement.classList.toggle('dark');
+  const isDark = document.documentElement.classList.contains('dark');
+  document.getElementById('themeToggle').textContent = isDark ? '☀️ Light' : '🌙 Dark';
+  updateUI();
+});
+
+document.getElementById('soundToggle').addEventListener('click', () => {
+  state.soundEnabled = !state.soundEnabled;
+  document.getElementById('soundToggle').textContent = state.soundEnabled ? '🔊 Sound On' : '🔇 Sound Off';
+});
+
+// Canvas interaction – only changes needle depth
+let dragging = false;
+canvas.addEventListener('pointerdown', e => {
+  dragging = true;
+  canvas.setPointerCapture(e.pointerId);
+  updateDepthFromEvent(e);
+});
+canvas.addEventListener('pointermove', e => { if (dragging) updateDepthFromEvent(e); });
+canvas.addEventListener('pointerup', () => dragging = false);
+
+function updateDepthFromEvent(e) {
+  const rect = canvas.getBoundingClientRect();
+  const y = e.clientY - rect.top;
+  const tissueTop = 130;
+  const maxD = 35;
+  const scale = (rect.height - tissueTop - 40) / maxD;
+  let depth = (y - tissueTop) / scale;
+  depth = Math.max(0, Math.min(maxD, Math.round(depth * 2) / 2));
+  state.depth = depth;
+  state.aspirated = false;
+  state.injected = false;
+  state.plungerProgress = 0;
+  document.getElementById('aspirationResult').textContent = '';
+  document.getElementById('depositBox').classList.add('hidden');
+  updateUI();
+}
+
+window.addEventListener('resize', () => draw());
+updateUI();
+</script>
 </body>
-
 </html>
